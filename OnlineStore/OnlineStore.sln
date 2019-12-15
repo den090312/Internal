@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsolePL", "ConsolePL\ConsolePL.csproj", "{23A3F460-9B8E-4B66-87AD-D2EC06DBBB18}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PL", "PL", "{2C819750-914F-4F6A-A3D0-2CB0D4C4281A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BLL", "BLL", "{BC9B88E8-EDDB-4DA9-9991-59FFED1492EA}"
@@ -13,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DAL", "DAL", "{6FF8E345-F5D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{3147E933-6129-4194-8F53-B0B018C5A4FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{61900C83-9E50-46AB-A6BF-44DC550F9048}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{61900C83-9E50-46AB-A6BF-44DC550F9048}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{23A3F460-9B8E-4B66-87AD-D2EC06DBBB18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{23A3F460-9B8E-4B66-87AD-D2EC06DBBB18}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{23A3F460-9B8E-4B66-87AD-D2EC06DBBB18}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{23A3F460-9B8E-4B66-87AD-D2EC06DBBB18}.Release|Any CPU.Build.0 = Release|Any CPU
 		{61900C83-9E50-46AB-A6BF-44DC550F9048}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{61900C83-9E50-46AB-A6BF-44DC550F9048}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61900C83-9E50-46AB-A6BF-44DC550F9048}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -34,7 +28,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{23A3F460-9B8E-4B66-87AD-D2EC06DBBB18} = {2C819750-914F-4F6A-A3D0-2CB0D4C4281A}
 		{61900C83-9E50-46AB-A6BF-44DC550F9048} = {BC9B88E8-EDDB-4DA9-9991-59FFED1492EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
