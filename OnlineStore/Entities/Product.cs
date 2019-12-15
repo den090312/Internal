@@ -16,7 +16,7 @@ namespace Entities
 
         public List<Characteristic> ListCharacteristic { get; set; }
 
-        public PriceOfProduct Price { get; set; }
+        public Price Price { get; set; }
 
         public List<Feedback> ListFeedback { get; set; }
 

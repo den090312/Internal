@@ -12,13 +12,9 @@ namespace Entities
 
         public decimal Sum { get; set; }
 
-        public DateTime DeadLine { get; set; }
-
         public int UserId { get; set; }
 
         public OrderStatus Status { get; set; }
-
-        public OrderDeliveryMethod DeliveryMethod { get; set; }
 
         public enum OrderStatus
         {
@@ -26,14 +22,6 @@ namespace Entities
             Opened = 1,
             PendingForSending = 2,
             PendingForDelivery = 3,
-        }
-
-        public enum OrderDeliveryMethod
-        {
-            None = 0,
-            Pickup = 1,
-            Courier = 2,
-            Post = 3
         }
     }
 }
