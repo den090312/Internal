@@ -15,5 +15,7 @@ namespace Entities
         public string LetterCode { get; set; }
 
         public sbyte Multiplicity { get; set; }
+
+        public double Rate { get; set; }
     }
 }
