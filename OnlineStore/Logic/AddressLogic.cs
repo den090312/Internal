@@ -16,11 +16,26 @@ namespace Logic
             AddressNullCheck(address);
             AddressEmptyStringCheck(address);
 
-            PositiveNumberCheck(address.House);
-            PositiveNumberCheck(address.Building);
-            PositiveNumberCheck(address.Apartment);
+            CountryCheck(address.Country);
+
+            PositiveIntCheck(address.House);
+            PositiveIntCheck(address.Building);
+            PositiveIntCheck(address.Apartment);
 
             return addressDao.Add(address);
+        }
+
+        private void CountryCheck(string country)
+        {
+            if (!CountryExists(country))
+            {
+                throw new ArgumentException($"{nameof(country)} is not exists!");
+            }
+        }
+
+        private bool CountryExists(string country)
+        {
+            return true;
         }
 
         private void AddressEmptyStringCheck(Address address)
@@ -38,7 +53,7 @@ namespace Logic
             NullCheck(address.Street);
         }
 
-        private void PositiveNumberCheck(int number)
+        private void PositiveIntCheck(int number)
         {
             if (number <= 0)
             {
