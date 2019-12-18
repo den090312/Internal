@@ -16,6 +16,10 @@ namespace Logic
             AddressNullCheck(address);
             AddressEmptyStringCheck(address);
 
+            PositiveNumberCheck(address.House);
+            PositiveNumberCheck(address.Building);
+            PositiveNumberCheck(address.Apartment);
+
             return addressDao.Add(address);
         }
 
@@ -24,9 +28,6 @@ namespace Logic
             EmptyStringCheck(address.Country);
             EmptyStringCheck(address.Locality);
             EmptyStringCheck(address.Street);
-            EmptyStringCheck(address.House);
-            EmptyStringCheck(address.Building);
-            EmptyStringCheck(address.Apartment);
         }
 
         private void AddressNullCheck(Address address)
@@ -35,9 +36,14 @@ namespace Logic
             NullCheck(address.Country);
             NullCheck(address.Locality);
             NullCheck(address.Street);
-            NullCheck(address.House);
-            NullCheck(address.Building);
-            NullCheck(address.Apartment);
+        }
+
+        private void PositiveNumberCheck(int number)
+        {
+            if (number <= 0)
+            {
+                throw new ArgumentException($"{nameof(number)} is less than zero!");
+            }
         }
 
         private void EmptyStringCheck(string inputString)

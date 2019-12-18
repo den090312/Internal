@@ -12,10 +12,10 @@ namespace Entities
 
         public string Street { get; set; }
 
-        public string House { get; set; }
+        public int House { get; set; }
 
-        public string Building { get; set; }
+        public int Building { get; set; }
 
-        public string Apartment { get; set; }
+        public int Apartment { get; set; }
     }
 }
