@@ -8,7 +8,7 @@ namespace Entities
     {
         public Order Order { get; set; }
 
-        public DateTime DeadLine { get; set; }
+        public DateTime Deadline { get; set; }
 
         public OrderDeliveryMethod DeliveryMethod { get; set; }
 

@@ -7,33 +7,33 @@ using System.Text;
 
 namespace Logic
 {
-    public class UnitOfMeasurementLogic : IUnitOfMeasurementLogic
+    public class CurrencyLogic : ICurrencyLogic
     {
-        private readonly IUnitOfMeasurementDao unitOfMeasurementDao;
+        private readonly ICurrencyDao currencyDao;
 
-        public UnitOfMeasurementLogic(IUnitOfMeasurementDao iUnitOfMeasurementDao)
+        public CurrencyLogic(ICurrencyDao iCurrencyDao)
         {
-            NullCheck(iUnitOfMeasurementDao);
+            NullCheck(iCurrencyDao);
 
-            unitOfMeasurementDao = iUnitOfMeasurementDao;
+            currencyDao = iCurrencyDao;
         }
 
-        public bool Add(UnitOfMeasurement unitOfMeasurement)
+        public bool Add(Currency currency)
         {
-            NullCheck(unitOfMeasurement);
-            PositiveIntCheck(unitOfMeasurement.Id);
-            UnitOfMeasurementNameCheck(unitOfMeasurement.Name);
+            NullCheck(currency);
+            PositiveIntCheck(currency.Id);
+            CurrencyNameCheck(currency);
 
-            unitOfMeasurement.Name = unitOfMeasurement.Name.ToLower();
+            currency.Name = currency.Name.ToUpper();
 
-            return unitOfMeasurementDao.Add(unitOfMeasurement);
+            return currencyDao.Add(currency);
         }
 
-        private void UnitOfMeasurementNameCheck(string name)
+        private void CurrencyNameCheck(Currency currency)
         {
-            NullCheck(name);
-            EmptyStringCheck(name);
-            NameCheck(name);
+            NullCheck(currency.Name);
+            EmptyStringCheck(currency.Name);
+            NameCheck(currency.Name);
         }
 
         private void NameCheck(string name)
@@ -44,15 +44,15 @@ namespace Logic
             }
         }
 
-        private bool NameIsOk(string name) => name.Length <= 50 && CyrillicOnly(name);
+        private bool NameIsOk(string name) => name.Length <= 50 && LatinOnly(name);
 
-        private bool CyrillicOnly(string name)
+        private bool LatinOnly(string name)
         {
             var nameLower = name.ToLower();
 
             foreach (var symbol in nameLower)
             {
-                if (symbol >= 'а' && symbol <= 'я')
+                if (symbol >= 'a' && symbol <= 'z')
                 {
                     continue;
                 }

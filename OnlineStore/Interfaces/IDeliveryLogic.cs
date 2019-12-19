@@ -5,8 +5,8 @@ using System.Text;
 
 namespace InterfacesBLL
 {
-    public interface IAddressLogic
+    public interface IDeliveryLogic
     {
-        bool Add(Address address);
+        bool Add(Delivery delivery);
     }
 }

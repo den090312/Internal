@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace InterfacesBLL
+namespace InterfacesDAL
 {
-    public interface IAddressLogic
+    public interface ICurrencyDao
     {
-        bool Add(Address address);
+        bool Add(Currency currency);
     }
 }

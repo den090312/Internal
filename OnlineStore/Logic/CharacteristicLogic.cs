@@ -11,6 +11,11 @@ namespace Logic
     {
         private readonly ICharacteristicDao characteristicDao;
 
+        public CharacteristicLogic(ICharacteristicDao iCharacteristicDao)
+        {
+            characteristicDao = iCharacteristicDao;
+        }
+
         public bool Add(Characteristic characteristic)
         {
             NullCheck(characteristic);         

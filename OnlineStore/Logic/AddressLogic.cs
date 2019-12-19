@@ -11,6 +11,13 @@ namespace Logic
     {
         private readonly IAddressDao addressDao;
 
+        public AddressLogic(IAddressDao iAddressDao)
+        {
+            NullCheck(addressDao);
+
+            addressDao = iAddressDao;
+        }
+
         public bool Add(Address address)
         {
             AddressNullCheck(address);

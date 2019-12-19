@@ -5,8 +5,8 @@ using System.Text;
 
 namespace InterfacesBLL
 {
-    public interface IAddressLogic
+    public interface ICurrencyLogic
     {
-        bool Add(Address address);
+        bool Add(Currency currency);
     }
 }
