@@ -20,22 +20,31 @@ namespace Logic
 
         public bool Add(Product product)
         {
-            NullCheck(product);
-            ProductNameCheck(product.Name);
-            EmptyStringCheck(product.Description);
-            ProductPhotoCheck(product.Photo);
-            NullCheck(product.Price);
+            ProductNullCheck(product);
+            NameCheck(product.Name);
+            DescriptionCheck(product.Description);
+            PhotoCheck(product.Photo);
 
             return productDao.Add(product);
         }
 
-        private void ProductPhotoCheck(byte[] photo)
+        private void ProductNullCheck(Product product)
         {
-            NullCheck(photo);
-            EmptyByteArrayCheck(photo);
+            NullCheck(product);
+            NullCheck(product.Description);
+            NullCheck(product.Photo);
+            NullCheck(product.Photo);
         }
 
-        private void EmptyByteArrayCheck(byte[] byteArray)
+        private void DescriptionCheck(string description)
+        {
+            if (description.Length <= 0 || description.Length > 4000)
+            {
+                throw new ArgumentException($"{nameof(description)} has incorrect length!");
+            }
+        }
+
+        private void PhotoCheck(byte[] byteArray)
         {
             if (byteArray.Length == 0)
             {
@@ -43,14 +52,13 @@ namespace Logic
             }
         }
 
-        private void ProductNameCheck(string name)
-        {
-            EmptyStringCheck(name);
-            NameCheck(name);
-        }
-
         private void NameCheck(string name)
         {
+            if (name.Length <= 0 || name.Length > 300)
+            {
+                throw new ArgumentException($"{nameof(name)} has incorrect length!");
+            }
+
             if (!CyrillicOnly(name))
             {
                 throw new ArgumentException($"{nameof(name)} is incorrect!");
@@ -74,14 +82,6 @@ namespace Logic
             }
 
             return true;
-        }
-
-        private void EmptyStringCheck(string inputString)
-        {
-            if (inputString == string.Empty)
-            {
-                throw new ArgumentException($"{nameof(inputString)} is empty!");
-            }
         }
 
         private void NullCheck<T>(T classObject) where T : class

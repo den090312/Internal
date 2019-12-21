@@ -20,21 +20,46 @@ namespace Logic
 
         public bool Add(User user)
         {
-            NullCheck(user);
-            UserNameCheck(user.FirstName);
-            UserNameCheck(user.Lastname);
+            UserNullCheck(user);
+            EmptyFieldsCheck(user);
+
+            FirstNameCheck(user.FirstName);
+            LastNameCheck(user.LastName);
 
             //ToDo проверка-замена первой буквы имени/фамилии на заглавную
 
-            UserEmailCheck(user.Email);
+            EmailCheck(user.Email);
             UserPhoneNumberCheck(user.PhoneNumber);
             UserLoginCheck(user.Login);
             UserPasswordCheck(user.Password);
             ProductPhotoCheck(user.Photo);
-            
+
             NullCheck(user.ListOrder);
 
             return userDao.Add(user);
+        }
+
+        private void EmptyFieldsCheck(User user)
+        {
+            EmptyStringCheck(user.FirstName);
+            EmptyStringCheck(user.LastName);
+            EmptyStringCheck(user.Email);
+            EmptyStringCheck(user.Login);
+            EmptyStringCheck(user.Password);
+
+            EmptyByteArrayCheck(user.Photo);
+        }
+
+        private void UserNullCheck(User user)
+        {
+            NullCheck(user);
+            NullCheck(user.FirstName);
+            NullCheck(user.LastName);
+            NullCheck(user.Email);
+            NullCheck(user.PhoneNumber);
+            NullCheck(user.Login);
+            NullCheck(user.Password);
+            NullCheck(user.Photo);
         }
 
         private void ProductPhotoCheck(byte[] photo)
@@ -53,29 +78,17 @@ namespace Logic
 
         private void UserPasswordCheck(string password)
         {
-            NullCheck(password);
-            EmptyStringCheck(password);
-
             //ToDo хэширование пароля
         }
 
         private void UserLoginCheck(string login)
         {
-            NullCheck(login);
-            EmptyStringCheck(login);
+            //ToDo проверка на валидный логин
         }
 
         private void UserPhoneNumberCheck(string phoneNumber)
         {
-            NullCheck(phoneNumber);
-            EmptyStringCheck(phoneNumber);
-        }
-
-        private void UserEmailCheck(string email)
-        {
-            NullCheck(email);
-            EmptyStringCheck(email);
-            EmailCheck(email);
+            //ToDo проверка на валидный номер телефона
         }
 
         private void EmailCheck(string email)
@@ -83,19 +96,28 @@ namespace Logic
             //ToDo проверка на валидный имейл
         }
 
-        private void UserNameCheck(string name)
+        private void FirstNameCheck(string firstName)
         {
-            NullCheck(name);
-            EmptyStringCheck(name);
-            NameCheck(name);
+            if (firstName.Length <= 0 || firstName.Length > 50)
+            {
+                throw new ArgumentException($"{nameof(firstName)} has incorrect length!");
+            }
+
+            if (!CyrillicOnly(firstName) && !LatinOnly(firstName))
+            {
+                throw new ArgumentException($"{nameof(firstName)} is incorrect!");
+            }
+
         }
 
-        private void NameCheck(string name)
+        private void LastNameCheck(string lastName)
         {
-            if (!CyrillicOnly(name))
+            if (lastName.Length <= 0 || lastName.Length > 150)
             {
-                throw new ArgumentException($"{nameof(name)} is incorrect!");
+                throw new ArgumentException($"{nameof(lastName)} has incorrect length!");
             }
+
+            //ToDo валидация фамилии
         }
 
         private bool CyrillicOnly(string name)
@@ -104,13 +126,32 @@ namespace Logic
 
             foreach (var symbol in nameLower)
             {
-                if (symbol >= 'а' && symbol <= 'я')
+                if (symbol < 'а' || symbol > 'я')
                 {
-                    continue;
+                    return false;
                 }
                 else
                 {
+                    continue;
+                }
+            }
+
+            return true;
+        }
+
+        private bool LatinOnly(string name)
+        {
+            var nameLower = name.ToLower();
+
+            foreach (var symbol in nameLower)
+            {
+                if (symbol < 'a' || symbol > 'z')
+                {
                     return false;
+                }
+                else
+                {
+                    continue;
                 }
             }
 
