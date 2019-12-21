@@ -19,9 +19,8 @@ namespace Logic
         public bool Add(Characteristic characteristic)
         {
             NullCheck(characteristic);         
-            PositiveIntCheck(characteristic.Id);
             CharacteristicNameCheck(characteristic.Name);
-            PositiveDoubleCheck(characteristic.Value);
+            NegativeZeroDoubleCheck(characteristic.Value);
             NullCheck(characteristic.UnitOfMeasurement);
 
             characteristic.Name = characteristic.Name.ToLower();
@@ -65,15 +64,7 @@ namespace Logic
             return true;
         }
 
-        private void PositiveIntCheck(int number)
-        {
-            if (number <= 0)
-            {
-                throw new ArgumentException($"{nameof(number)} is less than zero!");
-            }
-        }
-
-        private void PositiveDoubleCheck(double value)
+        private void NegativeZeroDoubleCheck(double value)
         {
             if (value <= 0)
             {

@@ -22,16 +22,15 @@ namespace Logic
         {
             NullCheck(delivery);
             NullCheck(delivery.Order);
-
-            DeliveryDeadlineCheck(delivery);
+            DeliveryDeadlineCheck(delivery.Deadline);
 
             return deliveryDao.Add(delivery);
         }
 
-        private void DeliveryDeadlineCheck(Delivery delivery)
+        private void DeliveryDeadlineCheck(DateTime deadLine)
         {
-            EmptyDateCheck(delivery.Deadline);
-            DeadlineCheck(delivery.Deadline);
+            EmptyDateCheck(deadLine);
+            DeadlineCheck(deadLine);
 
             //ToDo определить и проверять минимальный дэдлайн
         }
@@ -44,11 +43,11 @@ namespace Logic
             }
         }
 
-        private void EmptyDateCheck(DateTime inputDateTime)
+        private void EmptyDateCheck(DateTime value)
         {
-            if (inputDateTime == DateTime.MinValue)
+            if (value == DateTime.MinValue)
             {
-                throw new ArgumentException($"{nameof(inputDateTime)} is empty!");
+                throw new ArgumentException($"{nameof(value)} is empty!");
             }
         }
 

@@ -8,11 +8,13 @@ namespace Entities
     {
         public string Number { get; set; }
 
+        public int UserId { get; set; }
+
+        public DateTime Date { get; set; }
+
         public List<Product> ListProduct { get; set; }
 
         public decimal Sum { get; set; }
-
-        public int UserId { get; set; }
 
         public OrderStatus Status { get; set; }
 

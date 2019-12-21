@@ -6,6 +6,8 @@ namespace Entities
 {
     public class Rating
     {
+        public int UserCount { get; set; }
+
         public RatingValue Value { get; set; }
 
         public enum RatingValue

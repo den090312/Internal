@@ -22,12 +22,10 @@ namespace Logic
         {
             AddressNullCheck(address);
             AddressEmptyStringCheck(address);
-
             CountryCheck(address.Country);
-
-            PositiveIntCheck(address.House);
-            PositiveIntCheck(address.Building);
-            PositiveIntCheck(address.Apartment);
+            NegativeZeroIntCheck(address.House);
+            NegativeZeroIntCheck(address.Building);
+            NegativeZeroIntCheck(address.Apartment);
 
             return addressDao.Add(address);
         }
@@ -42,6 +40,8 @@ namespace Logic
 
         private bool CountryExists(string country)
         {
+            //ToDo проверка существования страны
+
             return true;
         }
 
@@ -60,11 +60,11 @@ namespace Logic
             NullCheck(address.Street);
         }
 
-        private void PositiveIntCheck(int number)
+        private void NegativeZeroIntCheck(int value)
         {
-            if (number <= 0)
+            if (value <= 0)
             {
-                throw new ArgumentException($"{nameof(number)} is less than zero!");
+                throw new ArgumentException($"{nameof(value)} is less than zero!");
             }
         }
 

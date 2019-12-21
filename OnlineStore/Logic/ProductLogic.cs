@@ -7,43 +7,55 @@ using System.Text;
 
 namespace Logic
 {
-    public class UnitOfMeasurementLogic : IUnitOfMeasurementLogic
+    public class ProductLogic : IProductLogic
     {
-        private readonly IUnitOfMeasurementDao unitOfMeasurementDao;
+        private readonly IProductDao productDao;
 
-        public UnitOfMeasurementLogic(IUnitOfMeasurementDao iUnitOfMeasurementDao)
+        public ProductLogic(IProductDao iProductDao)
         {
-            NullCheck(iUnitOfMeasurementDao);
+            NullCheck(iProductDao);
 
-            unitOfMeasurementDao = iUnitOfMeasurementDao;
+            productDao = iProductDao;
         }
 
-        public bool Add(UnitOfMeasurement unitOfMeasurement)
+        public bool Add(Product product)
         {
-            NullCheck(unitOfMeasurement);
-            UnitOfMeasurementNameCheck(unitOfMeasurement.Name);
+            NullCheck(product);
+            ProductNameCheck(product.Name);
+            EmptyStringCheck(product.Description);
+            ProductPhotoCheck(product.Photo);
+            NullCheck(product.Price);
 
-            unitOfMeasurement.Name = unitOfMeasurement.Name.ToLower();
-
-            return unitOfMeasurementDao.Add(unitOfMeasurement);
+            return productDao.Add(product);
         }
 
-        private void UnitOfMeasurementNameCheck(string name)
+        private void ProductPhotoCheck(byte[] photo)
         {
-            NullCheck(name);
+            NullCheck(photo);
+            EmptyByteArrayCheck(photo);
+        }
+
+        private void EmptyByteArrayCheck(byte[] byteArray)
+        {
+            if (byteArray.Length == 0)
+            {
+                throw new ArgumentException($"{nameof(byteArray)} is empty!");
+            }
+        }
+
+        private void ProductNameCheck(string name)
+        {
             EmptyStringCheck(name);
             NameCheck(name);
         }
 
         private void NameCheck(string name)
         {
-            if (!NameIsOk(name))
+            if (!CyrillicOnly(name))
             {
                 throw new ArgumentException($"{nameof(name)} is incorrect!");
             }
         }
-
-        private bool NameIsOk(string name) => name.Length <= 50 && CyrillicOnly(name);
 
         private bool CyrillicOnly(string name)
         {

@@ -21,19 +21,18 @@ namespace Logic
         public bool Add(Currency currency)
         {
             NullCheck(currency);
-            PositiveIntCheck(currency.Id);
-            CurrencyNameCheck(currency);
+            CurrencyNameCheck(currency.Name);
 
             currency.Name = currency.Name.ToUpper();
 
             return currencyDao.Add(currency);
         }
 
-        private void CurrencyNameCheck(Currency currency)
+        private void CurrencyNameCheck(string name)
         {
-            NullCheck(currency.Name);
-            EmptyStringCheck(currency.Name);
-            NameCheck(currency.Name);
+            NullCheck(name);
+            EmptyStringCheck(name);
+            NameCheck(name);
         }
 
         private void NameCheck(string name)
@@ -63,14 +62,6 @@ namespace Logic
             }
 
             return true;
-        }
-
-        private void PositiveIntCheck(int number)
-        {
-            if (number <= 0)
-            {
-                throw new ArgumentException($"{nameof(number)} is less than zero!");
-            }
         }
 
         private void EmptyStringCheck(string inputString)
