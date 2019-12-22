@@ -16,7 +16,7 @@ namespace Logic
         public AddressLogic(IAddressDao iAddressDao, IValidateLogic IValidateLogic)
         {
             addressDao = iAddressDao ?? throw new ArgumentNullException($"{nameof(iAddressDao)} is null!");
-            validateLogic = IValidateLogic ?? throw new ArgumentNullException($"{nameof(iAddressDao)} is null!");
+            validateLogic = IValidateLogic ?? throw new ArgumentNullException($"{nameof(IValidateLogic)} is null!");
         }
 
         public Tuple<bool, List<KeyValuePair<string, string>>> Add(Address address)

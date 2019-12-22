@@ -12,26 +12,12 @@ namespace Logic
         {
             errors = new List<KeyValuePair<string, string>>();
 
-            if (!IsNull(address))
+            if (address != null)
             {
                 //ToDo реализация валидации
             }
 
             return errors.Count == 0;
-        }
-
-        private bool IsNull<T>(T address) where T : class
-        {
-            if (address is null)
-            {
-                return true;
-
-                throw new ArgumentNullException($"{nameof(address)} is null!");
-            }
-            else
-            {
-                return false;
-            }
         }
     }
 }
