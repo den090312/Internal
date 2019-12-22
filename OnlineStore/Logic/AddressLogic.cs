@@ -11,13 +11,11 @@ namespace Logic
     {
         private readonly IAddressDao addressDao;
 
-        public string Message { get; private set; }
+        public string Message { get; private set; } = string.Empty;
 
         public AddressLogic(IAddressDao iAddressDao)
         {
-            FieldIsNotNull(addressDao);
-
-            addressDao = iAddressDao;
+            addressDao = iAddressDao ?? throw new ArgumentNullException($"{nameof(iAddressDao)} is null!"); ;
         }
 
         public Tuple<bool, string> Add(Address address) => IsValid(address) ? addressDao.Add(address) : Tuple.Create(false, Message);
