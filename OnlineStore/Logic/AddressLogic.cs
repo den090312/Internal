@@ -15,7 +15,7 @@ namespace Logic
 
         public AddressLogic(IAddressDao iAddressDao)
         {
-            addressDao = iAddressDao ?? throw new ArgumentNullException($"{nameof(iAddressDao)} is null!"); ;
+            addressDao = iAddressDao ?? throw new ArgumentNullException($"{nameof(iAddressDao)} is null!");
         }
 
         public Tuple<bool, string> Add(Address address) => IsValid(address) ? addressDao.Add(address) : Tuple.Create(false, Message);
