@@ -20,13 +20,13 @@ namespace Logic
 
         public Tuple<bool, string> Add(Address address) => IsValid(address) ? addressDao.Add(address) : Tuple.Create(false, Message);
 
-        private bool IsValid(Address address) => AddressHasNoNull(address) 
+        private bool IsValid(Address address) => AddressHasNoNullFields(address) 
             & CountryIsValid(address.Country) 
             & LocalityIsValid(address.Country, address.Locality) 
             & StreetIsValid(address.Country, address.Locality, address.Street) 
             & HouseIsValid(address.Country, address.Locality, address.Street, address.House);
 
-        public bool AddressHasNoNull(Address address) => FieldIsNotNull(address) 
+        public bool AddressHasNoNullFields(Address address) => FieldIsNotNull(address) 
             & FieldIsNotNull(address.Country) 
             & FieldIsNotNull(address.Locality) 
             & FieldIsNotNull(address.Street);
