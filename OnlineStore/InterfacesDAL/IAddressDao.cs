@@ -7,6 +7,6 @@ namespace InterfacesDAL
 {
     public interface IAddressDao
     {
-        bool Add(Address adress);
+        Tuple<bool, string> Add(Address adress);
     }
 }

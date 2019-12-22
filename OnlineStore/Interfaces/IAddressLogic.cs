@@ -7,6 +7,6 @@ namespace InterfacesBLL
 {
     public interface IAddressLogic
     {
-        bool Add(Address address);
+        Tuple<bool, string> Add(Address address);
     }
 }

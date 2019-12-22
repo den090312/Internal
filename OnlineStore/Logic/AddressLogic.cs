@@ -11,76 +11,104 @@ namespace Logic
     {
         private readonly IAddressDao addressDao;
 
+        public string Message { get; private set; }
+
         public AddressLogic(IAddressDao iAddressDao)
         {
-            NullCheck(addressDao);
+            FieldIsNotNull(addressDao);
 
             addressDao = iAddressDao;
         }
 
-        public bool Add(Address address)
-        {
-            AddressNullCheck(address);
-            AddressEmptyStringCheck(address);
-            CountryCheck(address.Country);
-            NegativeZeroIntCheck(address.House);
-            NegativeZeroIntCheck(address.Building);
-            NegativeZeroIntCheck(address.Apartment);
+        public Tuple<bool, string> Add(Address address) => IsValid(address) ? addressDao.Add(address) : Tuple.Create(false, Message);
 
-            return addressDao.Add(address);
-        }
+        private bool IsValid(Address address) => AddressHasNoNull(address) 
+            & CountryIsValid(address.Country) 
+            & LocalityIsValid(address.Country, address.Locality) 
+            & StreetIsValid(address.Country, address.Locality, address.Street) 
+            & HouseIsValid(address.Country, address.Locality, address.Street, address.House);
 
-        private void CountryCheck(string country)
-        {
-            if (!CountryExists(country))
-            {
-                throw new ArgumentException($"{nameof(country)} is not exists!");
-            }
-        }
+        public bool AddressHasNoNull(Address address) => FieldIsNotNull(address) 
+            & FieldIsNotNull(address.Country) 
+            & FieldIsNotNull(address.Locality) 
+            & FieldIsNotNull(address.Street);
 
-        private bool CountryExists(string country)
+        private bool CountryIsValid(string country) => StringIsNotEmpty(country) & CountryExists(country);
+
+        private bool LocalityIsValid(string country, string locality) => StringIsNotEmpty(locality) & LocalityExists(country, locality);
+
+        private bool StreetIsValid(string country, string locality, string street) => StringIsNotEmpty(street) & StreetExists(country, locality, street);
+
+        private bool HouseIsValid(string country, string locality, string street, int house) => IntIsGreaterThanZero(house)
+            & HouseExists(country, locality, street, house);
+
+        private bool HouseExists(string country, string locality, string street, int house)
         {
-            //ToDo проверка существования страны
+            //ToDo проверка сушествования дома на улице населенного пункта в стране
 
             return true;
         }
 
-        private void AddressEmptyStringCheck(Address address)
+        private bool StreetExists(string country, string locality, string street)
         {
-            EmptyStringCheck(address.Country);
-            EmptyStringCheck(address.Locality);
-            EmptyStringCheck(address.Street);
+            //ToDo проверка сушествования улицы в пределах населенного пункта в стране
+
+            return true;
         }
 
-        private void AddressNullCheck(Address address)
+        private bool LocalityExists(string country, string locality)
         {
-            NullCheck(address);
-            NullCheck(address.Country);
-            NullCheck(address.Locality);
-            NullCheck(address.Street);
+            //ToDo проверка сушествования населенного пункта в стране
+
+            return true;
         }
 
-        private void NegativeZeroIntCheck(int value)
+        private bool CountryExists(string country)
         {
-            if (value <= 0)
+            //ToDo проверка сушествования страны в списке стран
+
+            return true;
+        }
+
+        private bool IntIsGreaterThanZero(int house)
+        {
+            if (house < 0)
             {
-                throw new ArgumentException($"{nameof(value)} is less than zero!");
+                Message = $"{nameof(house)} is less than zero!";
+
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
 
-        private void EmptyStringCheck(string inputString)
+        private bool StringIsNotEmpty(string value)
         {
-            if (inputString == string.Empty)
+            if (value == string.Empty)
             {
-                throw new ArgumentException($"{nameof(inputString)} is empty!");
+                Message = $"{nameof(value)} is empty!";
+
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
 
-        private void NullCheck<T>(T classObject) where T : class
+        private bool FieldIsNotNull<T>(T fieldObject) where T : class
         {
-            if (classObject is null)
+            if (fieldObject is null)
             {
-                throw new ArgumentNullException($"{nameof(classObject)} is null!");
+                Message = $"{nameof(fieldObject)} is null!";
+
+                return false;
+            }
+            else 
+            {
+                return true;
             }
         }
     }
