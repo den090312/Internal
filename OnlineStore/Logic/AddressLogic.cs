@@ -26,7 +26,7 @@ namespace Logic
             || !StreetIsValid(address.Country, address.Locality, address.Street) 
             || !HouseIsValid(address.Country, address.Locality, address.Street, address.House);
 
-        public bool AddressHasNoNull(Address address) => FieldIsNotNull(address) 
+        private bool AddressHasNoNull(Address address) => FieldIsNotNull(address) 
             & FieldIsNotNull(address.Country) 
             & FieldIsNotNull(address.Locality) 
             & FieldIsNotNull(address.Street);
