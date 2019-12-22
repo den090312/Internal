@@ -17,5 +17,7 @@ namespace Entities
         public int Building { get; set; }
 
         public int Apartment { get; set; }
+
+        public Validator Validator { get; set; }
     }
 }

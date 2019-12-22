@@ -7,6 +7,6 @@ namespace InterfacesDAL
 {
     public interface IAddressDao
     {
-        Tuple<bool, string> Add(Address adress);
+        Tuple<bool, List<KeyValuePair<string, string>>> Add(Address address);
     }
 }

@@ -6,6 +6,6 @@ namespace InterfacesBLL
 {
     public interface IValidateLogic
     {
-        bool IsValid<T>(IEnumerable<T> validatedObjects, out List<KeyValuePair<string, string>> errors);
+        bool IsValid<T>(T validatedObject, out List<KeyValuePair<string, string>> errors) where T: class;
     }
 }
