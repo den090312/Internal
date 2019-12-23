@@ -8,7 +8,7 @@ namespace Entities
     {
         public bool Success { get; set; }
 
-        public IEnumerable<ValueTuple<ErrorType, string, string>> Errors { get; set; }
+        public IEnumerable<(ErrorType, string, string)> Errors { get; set; }
 
         public ErrorType Error { get; set; }
 

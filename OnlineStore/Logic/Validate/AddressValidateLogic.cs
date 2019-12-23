@@ -18,7 +18,7 @@ namespace Logic
             }
             else
             {
-                var errors = new List<ValueTuple<Validator.ErrorType, string, string>>();
+                var errors = new List<(Validator.ErrorType, string, string)>();
 
                 //ToDO валидация адреса
             }
