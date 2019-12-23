@@ -19,16 +19,16 @@ namespace Logic
             validateLogic = IValidateLogic ?? throw new ArgumentNullException($"{nameof(IValidateLogic)} is null!");
         }
 
-        public Tuple<bool, List<KeyValuePair<string, string>>> Add(Address address)
+        public void Add(Address address, out Validator validator)
         {
-            if (validateLogic.IsValid(address, out List<KeyValuePair<string, string>> errors))
+            var daoValidator = new Validator();
+
+            if (validateLogic.GetValidator(address).Success)
             {
-                return addressDao.Add(address);
+                addressDao.Add(address, out daoValidator);
             }
-            else
-            {
-                return Tuple.Create(false, errors);
-            }
+
+            validator = daoValidator;
         }
     }
 }

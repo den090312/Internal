@@ -8,7 +8,7 @@ namespace Dao
 {
     public class AddressDaoDb : IAddressDao
     {
-        public bool Add(Address adress)
+        public void Add(Address address, out Validator validator)
         {
             throw new NotImplementedException();
         }

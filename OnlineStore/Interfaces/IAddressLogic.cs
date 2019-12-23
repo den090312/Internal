@@ -7,6 +7,6 @@ namespace InterfacesBLL
 {
     public interface IAddressLogic
     {
-        Tuple<bool, List<KeyValuePair<string, string>>> Add(Address address);
+        void Add(Address address, out Validator validator);
     }
 }
