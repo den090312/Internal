@@ -6,16 +6,18 @@ namespace Entities
 {
     public class Address
     {
-        public string Country { get; set; }
+        public string Country { get; set; } = string.Empty;
 
-        public string Locality { get; set; }
+        public string Region { get; set; } = string.Empty;
 
-        public string Street { get; set; }
+        public string Locality { get; set; } = string.Empty;
 
-        public int House { get; set; }
+        public string Street { get; set; } = string.Empty;
 
-        public int Building { get; set; }
+        public ushort House { get; set; }
 
-        public int Apartment { get; set; }
+        public ushort Building { get; set; }
+
+        public ushort Apartment { get; set; }
     }
 }

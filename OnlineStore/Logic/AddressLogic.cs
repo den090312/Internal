@@ -21,14 +21,27 @@ namespace Logic
 
         public void Add(Address address, out Validator validator)
         {
-            var daoValidator = new Validator();
-
-            if (validateLogic.GetValidator(address).Success)
+            if (address != null)
             {
-                addressDao.Add(address, out daoValidator);
+                AddAddress(address, out validator);
             }
+            else
+            {
+                validator = new Validator();
+                var nameOfAddress = nameof(address);
+                validator.Errors.Add((Validator.ErrorType.Fatal, nameOfAddress, $"{nameOfAddress} is null!"));
+            }
+        }
 
-            validator = daoValidator;
+        private void AddAddress(Address address, out Validator validator)
+        {
+            validator = validateLogic.GetValidator(address);
+
+            if (validator.Success)
+            {
+                addressDao.Add(address, out Validator daoValidator);
+                validator = daoValidator;
+            }
         }
     }
 }
