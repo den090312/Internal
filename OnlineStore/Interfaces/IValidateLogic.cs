@@ -5,8 +5,8 @@ using System.Text;
 
 namespace InterfacesBLL
 {
-    public interface IValidateLogic
+    public interface IValidateLogic<T>
     {
-        Validator GetValidator<T>(T validatedObject) where T: class;
+        Validator GetValidator(T validatedObject);
     }
 }

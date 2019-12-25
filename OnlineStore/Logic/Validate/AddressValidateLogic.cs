@@ -7,13 +7,13 @@ using System.Text;
 
 namespace Logic
 {
-    public class AddressValidateLogic : IValidateLogic
+    public class AddressValidateLogic: IValidateLogic<Address>
     {
-        public Validator GetValidator<T>(T validatedObject) where T: class
+        public Validator GetValidator(Address address)
         {
             var validator = new Validator();
 
-            if (ObjectIsAddress(validatedObject, validator, out Address address))
+            if (address != null)
             {
                 ValidateAddress(address, validator);
             }
@@ -21,40 +21,9 @@ namespace Logic
             return validator;
         }
 
-        private bool ObjectIsAddress<T>(T validatedObject, Validator validator, out Address address) where T : class
-        {
-            var nameOfObject = nameof(validatedObject);
-
-            if (validatedObject == null)
-            {
-                validator.Errors.Add((Validator.ErrorType.Fatal, nameOfObject, $"{nameOfObject} is null!"));
-                address = null;
-
-                return false;
-            }
-
-            if (!(validatedObject is Address))
-            {
-                validator.Errors.Add((Validator.ErrorType.Fatal, nameOfObject, $"{nameOfObject} isn't address!"));
-                address = null;
-
-                return false;
-            }
-
-            address = validatedObject as Address;
-
-            return true;
-        }
-
         private void ValidateAddress(Address address, Validator validator)
         {
-            if (!CountryExists(address, validator) 
-                || !RegionExists(address, validator) 
-                || !LocalityExists(address, validator) 
-                || !StreetExists(address, validator))
-            {
-                return;
-            }
+            ValidateAddressFields(address, validator);
 
             if (address.House == ushort.MinValue)
             {
@@ -67,131 +36,107 @@ namespace Logic
             }
         }
 
-        private bool StreetExists(Address address, Validator validator)
+        private void ValidateAddressFields(Address address, Validator validator)
         {
-            var street = address.Street;
-
-            if (street == string.Empty)
-            {
-                validator.Errors.Add((Validator.ErrorType.Warning, "Street", "Street isn't specified!"));
-
-                return false;
-            }
-
-            var country = address.Country;
-            var region = address.Region;
-            var locality = address.Locality;
-
-            if (!StreetExists(country, region, locality, street))
-            {
-                validator.Errors.Add((Validator.ErrorType.Warning, "Street", $"Street: '{street}' isn't exists " +
-                    $"in locality: '{locality}', " +
-                    $"in region: '{region}', " +
-                    $"in country: '{country}'!"));
-
-                return false;
-            }
-
-            return true;
+            ValidateField("Country", address.Country, address, validator);
+            ValidateField("Region", address.Region, address, validator);
+            ValidateField("Locality", address.Locality, address, validator);
+            ValidateField("Street", address.Street, address, validator);
+            ValidateField("House", address.House, address, validator);
         }
 
-        private bool LocalityExists(Address address, Validator validator)
+        private void ValidateField(string name, ushort value, Address address, Validator validator)
         {
-            var locality = address.Locality;
-
-            if (locality == string.Empty)
+            if (value == ushort.MinValue)
             {
-                validator.Errors.Add((Validator.ErrorType.Warning, "Locality", "Locality isn't specified!"));
+                validator.Errors.Add((Validator.ErrorType.Warning, name, $"{name} is not specified!"));
 
-                return false;
+                return;
             }
 
-            var country = address.Country;
-            var region = address.Region;
-
-            if (!LocalityExists(country, region, locality))
+            if (!ValueExists(name, value, address, validator))
             {
-                validator.Errors.Add((Validator.ErrorType.Warning, "Locality", $"Locality: '{locality}' isn't exists " +
-                    $"in region: '{region}', " +
-                    $"in country: '{country}'!"));
+                validator.Errors.Add((Validator.ErrorType.Warning, name, $"{name} is not exists!"));
 
-                return false;
+                return;
+            }
+        }
+
+        private void ValidateField(string name, string value, Address address, Validator validator)
+        {
+            if (value is null)
+            {
+                validator.Errors.Add((Validator.ErrorType.Fatal, name, $"{name} is null!"));
+
+                return;
             }
 
-            return true;
-        }
-
-        private bool RegionExists(Address address, Validator validator)
-        {
-            var region = address.Region;
-
-            if (region == string.Empty)
+            if (value == string.Empty)
             {
-                validator.Errors.Add((Validator.ErrorType.Warning, "Region", "Region isn't specified!"));
+                validator.Errors.Add((Validator.ErrorType.Warning, name, $"{name} is empty!"));
 
-                return false;
+                return;
             }
 
-            var country = address.Country;
-
-            if (!RegionExists(country, region))
+            if (!ValueExists(name, value, address, validator))
             {
-                validator.Errors.Add((Validator.ErrorType.Warning, "Region", $"Region: '{region}' isn't exists " +
-                    $"in country: '{country}'!"));
+                validator.Errors.Add((Validator.ErrorType.Warning, name, $"{name} is not exists!"));
 
-                return false;
+                return;
             }
-
-            return true;
         }
 
-        private bool CountryExists(Address address, Validator validator)
+        private bool ValueExists(string name, ushort value, Address address, Validator validator)
         {
-            var country = address.Country;
-
-            if (country == string.Empty)
+            switch (name)
             {
-                validator.Errors.Add((Validator.ErrorType.Warning, "Country", "Country isn't specified!"));
-
-                return false;
+                case "House":
+                    return HouseExists(value, address, validator);
+                default:
+                    return true;
             }
+        }
 
-            if (!CountryExists(country))
+        private bool ValueExists(string name, string value, Address address, Validator validator)
+        {
+            switch (name)
             {
-                validator.Errors.Add((Validator.ErrorType.Warning, "Country", $"Country: '{country}' isn't exists!"));
-
-                return false;
+                case "Country":
+                    return CountryExists(value, address, validator);
+                case "Region":
+                    return RegionExists(value, address, validator);
+                case "Locality":
+                    return LocalityExists(value, address, validator);
+                case "Street":
+                    return StreetExists(value, address, validator);
+                default:
+                    return true;
             }
-
-            return true;
         }
 
-        private bool StreetExists(string country, string region, string locality, string street)
+        private bool HouseExists(ushort value, Address address, Validator validator)
         {
-            //ToDo проверка существования улицы 
-
-            return true;
+            throw new NotImplementedException();
         }
 
-        private bool LocalityExists(string country, string region, string locality)
+        private bool StreetExists(string value, Address address, Validator validator)
         {
-            //ToDo проверка существования населенного пункта
-
-            return true;
+            throw new NotImplementedException();
         }
 
-        private bool RegionExists(string country, string locality)
+        private bool LocalityExists(string value, Address address, Validator validator)
         {
-            //ToDo проверка существования региона
-
-            return true;
+            throw new NotImplementedException();
         }
 
-        private bool CountryExists(string country)
+        private bool RegionExists(string value, Address address, Validator validator)
         {
-            //ToDo проверка существования страны в списке стран
+            throw new NotImplementedException();
+        }
 
-            return true;
+        private bool CountryExists(string value, Address address, Validator validator)
+        {
+            throw new NotImplementedException();
         }
     }
 }
