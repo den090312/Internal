@@ -25,11 +25,6 @@ namespace Logic
         {
             ValidateAddressFields(address, validator);
 
-            if (address.House == ushort.MinValue)
-            {
-                validator.Errors.Add((Validator.ErrorType.Warning, "House", $"House isn't specified!"));
-            }
-
             if (validator.Errors.Count() == 0)
             {
                 validator.Success = true;
