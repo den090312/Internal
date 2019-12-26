@@ -7,23 +7,24 @@ using System.Text;
 
 namespace Logic
 {
-    public class AddressValidateLogic: IValidateLogic<Address>
+    public class AddressValidateLogic : IValidateLogic<Address>
     {
+        private Address address = new Address();
+
+        private readonly Validator validator = new Validator();
+
         public Validator GetValidator(Address address)
         {
-            var validator = new Validator();
+            this.address = address ?? throw new ArgumentNullException(nameof(address));
 
-            if (address != null)
-            {
-                ValidateAddress(address, validator);
-            }
+            ValidateAddress();
 
             return validator;
         }
 
-        private void ValidateAddress(Address address, Validator validator)
+        private void ValidateAddress()
         {
-            ValidateAddressFields(address, validator);
+            ValidateAddressFields();
 
             if (validator.Errors.Count() == 0)
             {
@@ -31,16 +32,16 @@ namespace Logic
             }
         }
 
-        private void ValidateAddressFields(Address address, Validator validator)
+        private void ValidateAddressFields()
         {
-            ValidateField("Country", address.Country, address, validator);
-            ValidateField("Region", address.Region, address, validator);
-            ValidateField("Locality", address.Locality, address, validator);
-            ValidateField("Street", address.Street, address, validator);
-            ValidateField("House", address.House, address, validator);
+            ValidateField("Country", address.Country);
+            ValidateField("Region", address.Region);
+            ValidateField("Locality", address.Locality);
+            ValidateField("Street", address.Street);
+            ValidateField("House", address.House);
         }
 
-        private void ValidateField(string name, ushort value, Address address, Validator validator)
+        private void ValidateField(string name, ushort value)
         {
             if (value == ushort.MinValue)
             {
@@ -49,7 +50,7 @@ namespace Logic
                 return;
             }
 
-            if (!ValueExists(name, value, address, validator))
+            if (!ValueExists(name, value))
             {
                 validator.Errors.Add((Validator.ErrorType.Warning, name, $"{name} is not exists!"));
 
@@ -57,7 +58,7 @@ namespace Logic
             }
         }
 
-        private void ValidateField(string name, string value, Address address, Validator validator)
+        private void ValidateField(string name, string value)
         {
             if (value is null)
             {
@@ -73,7 +74,7 @@ namespace Logic
                 return;
             }
 
-            if (!ValueExists(name, value, address, validator))
+            if (!ValueExists(name, value))
             {
                 validator.Errors.Add((Validator.ErrorType.Warning, name, $"{name} is not exists!"));
 
@@ -81,55 +82,55 @@ namespace Logic
             }
         }
 
-        private bool ValueExists(string name, ushort value, Address address, Validator validator)
+        private bool ValueExists(string name, ushort value)
         {
             switch (name)
             {
                 case "House":
-                    return HouseExists(value, address, validator);
+                    return HouseExists(value);
                 default:
                     return true;
             }
         }
 
-        private bool ValueExists(string name, string value, Address address, Validator validator)
+        private bool ValueExists(string name, string value)
         {
             switch (name)
             {
                 case "Country":
-                    return CountryExists(value, address, validator);
+                    return CountryExists(value);
                 case "Region":
-                    return RegionExists(value, address, validator);
+                    return RegionExists(value);
                 case "Locality":
-                    return LocalityExists(value, address, validator);
+                    return LocalityExists(value);
                 case "Street":
-                    return StreetExists(value, address, validator);
+                    return StreetExists(value);
                 default:
                     return true;
             }
         }
 
-        private bool HouseExists(ushort value, Address address, Validator validator)
+        private bool HouseExists(ushort value)
         {
             throw new NotImplementedException();
         }
 
-        private bool StreetExists(string value, Address address, Validator validator)
+        private bool StreetExists(string value)
         {
             throw new NotImplementedException();
         }
 
-        private bool LocalityExists(string value, Address address, Validator validator)
+        private bool LocalityExists(string value)
         {
             throw new NotImplementedException();
         }
 
-        private bool RegionExists(string value, Address address, Validator validator)
+        private bool RegionExists(string value)
         {
             throw new NotImplementedException();
         }
 
-        private bool CountryExists(string value, Address address, Validator validator)
+        private bool CountryExists(string value)
         {
             throw new NotImplementedException();
         }
