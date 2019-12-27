@@ -14,25 +14,11 @@ namespace Logic
         {
             var address = inputAddress ?? throw new ArgumentNullException(nameof(inputAddress));
 
-            AddressValidation.StringFieldName = "Country";
-            AddressValidation.StringFieldValue = address.Country;
-            _ = address.Country.NotNull().Required().Length(2, 50).Match().Exists();
-
-            AddressValidation.StringFieldName = "Region";
-            AddressValidation.StringFieldValue = address.Region;
-            _ = address.Region.NotNull().Required().Length(2, 50).Match().Exists();
-
-            AddressValidation.StringFieldName = "Locality";
-            AddressValidation.StringFieldValue = address.Locality;
-            _ = address.Locality.NotNull().Required().Length(2, 50).Match().Exists();
-
-            AddressValidation.StringFieldName = "Street";
-            AddressValidation.StringFieldValue = address.Street;
-            _ = address.Street.NotNull().Required().Length(2, 50).Match().Exists();
-
-            AddressValidation.StringFieldName = "House";
-            AddressValidation.UshortField = address.House;
-            _ = address.House.Required().Exists();
+            _ = address.Country.As(nameof(address.Country)).Required().NotNull().Length(2, 50).Match();
+            _ = address.Region.As(nameof(address.Region)).Required().NotNull().Length(2, 50).Match();
+            _ = address.Locality.As(nameof(address.Locality)).Required().NotNull().Length(2, 50).Match();
+            _ = address.Street.As(nameof(address.Street)).Required().NotNull().Length(2, 50).Match();
+            _ = address.House.As(nameof(address.House)).Required();
 
             var validator = AddressValidation.Validator;
 
@@ -51,59 +37,70 @@ namespace Logic
 
         public static Validator Validator { get; private set; }
 
-        public static string StringFieldName { get; set; }
+        public static string FieldName { get; set; }
 
         public static string StringFieldValue { get; set; }
-
-        public static ushort UshortField { get; set; }
 
         static AddressValidation()
         {
             expression = @"[А-Я]+(([а-я]+)\s*)*";
             Validator = new Validator();
-            StringFieldName = string.Empty;
+            FieldName = string.Empty;
             StringFieldValue = string.Empty;
         }
 
-        public static bool NotNull(this string field)
+        public static string As(this string value, string name)
         {
-            if (field is null)
-            {
-                Validator.Errors.Add((Validator.ErrorType.Fatal, nameof(field), $"{nameof(field)} is null!"));
+            FieldName = name;
+            StringFieldValue = value;
 
-                return false;
-            }
-
-            return true;
+            return value;
         }
 
-        public static bool Required(this bool notNull)
+        public static ushort As(this ushort value, string name)
         {
-            if (!notNull)
+            FieldName = name;
+
+            return value;
+        }
+
+        public static bool NotNull(this bool continew)
+        {
+            if (!continew)
             {
                 return false;
             }
 
-            var name = nameof(StringFieldName);
+            if (StringFieldValue is null)
+            {
+                Validator.Errors.Add((Validator.ErrorType.Fatal, FieldName, $"{FieldName} is null!"));
 
-            return name == "Country" || name == "Region" || name == "Locality" || name == "Street";
+                return false;
+            }
+
+            return true; 
+        }
+
+        public static bool Required(this string field)
+        {
+            return FieldName == "Country" || FieldName == "Region" || FieldName == "Locality" || FieldName == "Street";
         }
 
         public static bool Required(this ushort field)
         {
-            return nameof(field) == "House";
+            return FieldName == "House";
         }
 
-        public static bool Length(this bool required, ushort begin, ushort end)
+        public static bool Length(this bool continew, ushort begin, ushort end)
         {
-            if (!required)
+            if (!continew)
             {
                 return false;
             }
 
             if (StringFieldValue.Length < begin | StringFieldValue.Length > end)
             {
-                Validator.Errors.Add((Validator.ErrorType.Warning, nameof(StringFieldName), $"{nameof(StringFieldName)} has incorrect length!"));
+                Validator.Errors.Add((Validator.ErrorType.Warning, FieldName, $"{FieldName} has incorrect length!"));
 
                 return false;
             }
@@ -111,25 +108,18 @@ namespace Logic
             return true;
         }
 
-        public static bool Match(this bool lengthIsOk)
+        public static bool Match(this bool continew)
         {
-            if (!lengthIsOk)
+            if (!continew)
             {
                 return false;
             }
 
-            var isMatch = new Regex(expression).IsMatch(StringFieldValue);
-
-            if (!isMatch)
+            if (!new Regex(expression).IsMatch(StringFieldValue))
             {
-                Validator.Errors.Add((Validator.ErrorType.Warning, nameof(StringFieldName), $"{nameof(StringFieldName)} is empty!"));
+                Validator.Errors.Add((Validator.ErrorType.Warning, FieldName, $"{FieldName} is not match to expression!"));
             }
 
-            return isMatch;
-        }
-
-        public static bool Exists(this bool match)
-        {
             return true;
         }
     }
