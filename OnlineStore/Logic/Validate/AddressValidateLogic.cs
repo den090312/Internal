@@ -4,135 +4,110 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Logic
 {
     public class AddressValidateLogic : IValidateLogic<Address>
     {
-        private Address address = new Address();
-
-        private readonly Validator validator = new Validator();
-
-        public Validator GetValidator(Address address)
+        public Validator GetValidator(Address inputAddress)
         {
-            this.address = address ?? throw new ArgumentNullException(nameof(address));
+            var address = inputAddress ?? throw new ArgumentNullException(nameof(inputAddress));
 
-            ValidateAddress();
+            _ = address.Country.NotNull().Required(address.Country).Length(address.Country, 2, 50).Match(address.Country).Exists(address.Country);
+            _ = address.Region.NotNull().Required(address.Region).Length(address.Region, 2, 50).Match(address.Region).Exists(address.Region);
+            _ = address.Locality.NotNull().Required(address.Locality).Length(address.Locality, 2, 50).Match(address.Locality).Exists(address.Locality);
+            _ = address.Street.NotNull().Required(address.Street).Length(address.Street, 2, 50).Match(address.Street).Exists(address.Street);
+            _ = address.House.Required().Exists(address.House);
 
-            return validator;
-        }
-
-        private void ValidateAddress()
-        {
-            ValidateAddressFields();
+            var validator = AddressValidation.Validator;
 
             if (validator.Errors.Count() == 0)
             {
                 validator.Success = true;
             }
-        }
 
-        private void ValidateAddressFields()
-        {
-            ValidateField("Country", address.Country);
-            ValidateField("Region", address.Region);
-            ValidateField("Locality", address.Locality);
-            ValidateField("Street", address.Street);
-            ValidateField("House", address.House);
+            return validator;
         }
+    }
 
-        private void ValidateField(string name, ushort value)
+    public static class AddressValidation
+    {
+        private readonly static string expression = @"[А-Я]+(([а-я]+)\s*)*";
+
+        public static Validator Validator { get; private set; } = new Validator();
+
+        public static bool NotNull(this string field)
         {
-            if (value == ushort.MinValue)
+            if (field is null)
             {
-                validator.Errors.Add((Validator.ErrorType.Warning, name, $"{name} is not specified!"));
+                Validator.Errors.Add((Validator.ErrorType.Fatal, nameof(field), $"{nameof(field)} is null!"));
 
-                return;
+                return false;
             }
 
-            if (!ValueExists(name, value))
-            {
-                validator.Errors.Add((Validator.ErrorType.Warning, name, $"{name} is not exists!"));
-
-                return;
-            }
+            return true;
         }
 
-        private void ValidateField(string name, string value)
+        public static bool Required(this bool notNull, string field)
         {
-            if (value is null)
+            if (!notNull)
             {
-                validator.Errors.Add((Validator.ErrorType.Fatal, name, $"{name} is null!"));
-
-                return;
+                return false;
             }
 
-            if (value == string.Empty)
-            {
-                validator.Errors.Add((Validator.ErrorType.Warning, name, $"{name} is empty!"));
+            var name = nameof(field);
 
-                return;
+            return name == "Country" || name == "Region" || name == "Locality" || name == "Street";
+        }
+
+        public static bool Required(this ushort field)
+        {
+            return nameof(field) == "House";
+        }
+
+        public static bool Length(this bool required, string field, ushort begin, ushort end)
+        {
+            if (!required)
+            {
+                return false;
             }
 
-            if (!ValueExists(name, value))
+            if (field.Length < begin | field.Length > end)
             {
-                validator.Errors.Add((Validator.ErrorType.Warning, name, $"{name} is not exists!"));
+                Validator.Errors.Add((Validator.ErrorType.Warning, nameof(field), $"{nameof(field)} has incorrect length!"));
 
-                return;
+                return false;
             }
+
+            return true;
         }
 
-        private bool ValueExists(string name, ushort value)
+        public static bool Match(this bool lengthIsOk, string field)
         {
-            switch (name)
+            if (!lengthIsOk)
             {
-                case "House":
-                    return HouseExists(value);
-                default:
-                    return true;
+                return false;
             }
-        }
 
-        private bool ValueExists(string name, string value)
-        {
-            switch (name)
+            var isMatch = new Regex(expression).IsMatch(field);
+
+            if (!isMatch)
             {
-                case "Country":
-                    return CountryExists(value);
-                case "Region":
-                    return RegionExists(value);
-                case "Locality":
-                    return LocalityExists(value);
-                case "Street":
-                    return StreetExists(value);
-                default:
-                    return true;
+                Validator.Errors.Add((Validator.ErrorType.Warning, nameof(field), $"{nameof(field)} is empty!"));
             }
+
+            return isMatch;
         }
 
-        private bool HouseExists(ushort value)
+        public static bool Exists(this bool match, string field)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
-        private bool StreetExists(string value)
+        public static bool Exists(this bool match, ushort field)
         {
-            throw new NotImplementedException();
-        }
-
-        private bool LocalityExists(string value)
-        {
-            throw new NotImplementedException();
-        }
-
-        private bool RegionExists(string value)
-        {
-            throw new NotImplementedException();
-        }
-
-        private bool CountryExists(string value)
-        {
-            throw new NotImplementedException();
+            return true;
         }
     }
 }
