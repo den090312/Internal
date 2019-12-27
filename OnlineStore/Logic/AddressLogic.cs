@@ -11,9 +11,9 @@ namespace Logic
     {
         private readonly IAddressDao addressDao;
 
-        private readonly IValidateLogic validateLogic;
+        private readonly IValidateLogic<Address> validateLogic;
 
-        public AddressLogic(IAddressDao iAddressDao, IValidateLogic IValidateLogic)
+        public AddressLogic(IAddressDao iAddressDao, IValidateLogic<Address> IValidateLogic)
         {
             addressDao = iAddressDao ?? throw new ArgumentNullException($"{nameof(iAddressDao)} is null!");
             validateLogic = IValidateLogic ?? throw new ArgumentNullException($"{nameof(IValidateLogic)} is null!");

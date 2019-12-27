@@ -1,4 +1,5 @@
 ﻿using Dao;
+using Entities;
 using InterfacesBLL;
 using InterfacesDAL;
 using Logic;
@@ -9,7 +10,7 @@ namespace DependencyResolver
     {
         private static readonly IAddressDao addressDao;
 
-        private static readonly IValidateLogic addressValidateLogic;
+        private static readonly IValidateLogic<Address> addressValidateLogic;
 
         public static IAddressLogic AddressLogic { get; private set; }
 
