@@ -14,18 +14,23 @@ namespace Logic
         {
             var address = inputAddress ?? throw new ArgumentNullException(nameof(inputAddress));
 
-            AddressValidation.StringField = address.Country;
+            AddressValidation.StringFieldName = "Country";
+            AddressValidation.StringFieldValue = address.Country;
             _ = address.Country.NotNull().Required().Length(2, 50).Match().Exists();
 
-            AddressValidation.StringField = address.Region;
+            AddressValidation.StringFieldName = "Region";
+            AddressValidation.StringFieldValue = address.Region;
             _ = address.Region.NotNull().Required().Length(2, 50).Match().Exists();
 
-            AddressValidation.StringField = address.Locality;
+            AddressValidation.StringFieldName = "Locality";
+            AddressValidation.StringFieldValue = address.Locality;
             _ = address.Locality.NotNull().Required().Length(2, 50).Match().Exists();
 
-            AddressValidation.StringField = address.Locality;
-            _ = address.Locality.NotNull().Required().Length(2, 50).Match().Exists();
+            AddressValidation.StringFieldName = "Street";
+            AddressValidation.StringFieldValue = address.Street;
+            _ = address.Street.NotNull().Required().Length(2, 50).Match().Exists();
 
+            AddressValidation.StringFieldName = "House";
             AddressValidation.UshortField = address.House;
             _ = address.House.Required().Exists();
 
@@ -46,7 +51,9 @@ namespace Logic
 
         public static Validator Validator { get; private set; }
 
-        public static string StringField { get; set; }
+        public static string StringFieldName { get; set; }
+
+        public static string StringFieldValue { get; set; }
 
         public static ushort UshortField { get; set; }
 
@@ -54,7 +61,8 @@ namespace Logic
         {
             expression = @"[А-Я]+(([а-я]+)\s*)*";
             Validator = new Validator();
-            StringField = string.Empty;
+            StringFieldName = string.Empty;
+            StringFieldValue = string.Empty;
         }
 
         public static bool NotNull(this string field)
@@ -76,7 +84,7 @@ namespace Logic
                 return false;
             }
 
-            var name = nameof(StringField);
+            var name = nameof(StringFieldName);
 
             return name == "Country" || name == "Region" || name == "Locality" || name == "Street";
         }
@@ -93,9 +101,9 @@ namespace Logic
                 return false;
             }
 
-            if (StringField.Length < begin | StringField.Length > end)
+            if (StringFieldValue.Length < begin | StringFieldValue.Length > end)
             {
-                Validator.Errors.Add((Validator.ErrorType.Warning, nameof(StringField), $"{nameof(StringField)} has incorrect length!"));
+                Validator.Errors.Add((Validator.ErrorType.Warning, nameof(StringFieldName), $"{nameof(StringFieldName)} has incorrect length!"));
 
                 return false;
             }
@@ -110,11 +118,11 @@ namespace Logic
                 return false;
             }
 
-            var isMatch = new Regex(expression).IsMatch(StringField);
+            var isMatch = new Regex(expression).IsMatch(StringFieldValue);
 
             if (!isMatch)
             {
-                Validator.Errors.Add((Validator.ErrorType.Warning, nameof(StringField), $"{nameof(StringField)} is empty!"));
+                Validator.Errors.Add((Validator.ErrorType.Warning, nameof(StringFieldName), $"{nameof(StringFieldName)} is empty!"));
             }
 
             return isMatch;
