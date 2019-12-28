@@ -7,6 +7,6 @@ namespace InterfacesBLL
 {
     public interface IAddressLogic
     {
-        void Add(Address address, out ValidatableObject validator);
+        void Add(Address address);
     }
 }

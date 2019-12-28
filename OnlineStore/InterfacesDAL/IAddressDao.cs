@@ -7,6 +7,6 @@ namespace InterfacesDAL
 {
     public interface IAddressDao
     {
-        void Add(Address address, out ValidatableObject validator);
+        //void Add(Address address, out ValidatableObject validator);
     }
 }

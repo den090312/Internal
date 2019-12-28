@@ -14,11 +14,11 @@ namespace DependencyResolver
 
         public static IAddressLogic AddressLogic { get; private set; }
 
-        static Dependencies()
-        {
-            addressDao = new AddressDaoDb();
-            addressValidateLogic = new AddressValidateLogic();
-            AddressLogic = new AddressLogic(addressDao, addressValidateLogic);
-        }
+        //static Dependencies()
+        //{
+        //    addressDao = new AddressDaoDb();
+        //    addressValidateLogic = new AddressValidateLogic();
+        //    AddressLogic = new AddressLogic(addressDao, addressValidateLogic);
+        //}
     }
 }

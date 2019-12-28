@@ -7,6 +7,6 @@ namespace InterfacesBLL
 {
     public interface IValidateLogic<T>
     {
-        ValidatableObject GetValidator(T validatedObject);
+        //ValidatableObject<T> GetValidator(T validatedObject);
     }
 }

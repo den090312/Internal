@@ -6,11 +6,8 @@ using System.Text;
 
 namespace Dao
 {
-    public class AddressDaoDb : IAddressDao
+    public class AddressDaoDb
     {
-        public void Add(Address address, out ValidatableObject validator)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }

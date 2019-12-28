@@ -19,5 +19,12 @@ namespace Entities
             Error,
             Fatal
         }
+
+        public Error(Types type, string method, string description)
+        {
+            Type = type;
+            Method = method;
+            Description = description;
+        }
     }
 }
