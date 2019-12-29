@@ -20,7 +20,9 @@ namespace Logic
 
         public void Add(Address address)
         {
-            if (validateLogic.Validate(address ?? throw new ArgumentNullException($"{nameof(address)} is null!")).IsValid)
+            if (address is null) throw new ArgumentNullException(nameof(address));
+
+            if (validateLogic.Validate(address).IsValid)
             {
                 addressDao.Add(address, out ValidatableObject<Address> validatedAddress);
             }

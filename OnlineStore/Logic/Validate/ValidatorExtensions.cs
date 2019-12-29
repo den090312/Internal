@@ -44,6 +44,7 @@ namespace Logic.Validate
 
             if (field.Field is null)
             {
+                field.IsValid = false;
                 field.AddError(new Error(Error.Types.Warning, nameof(Required), $"Field '{field.FieldName}' is required"));
             }
 
@@ -56,11 +57,13 @@ namespace Logic.Validate
 
             if (field.Field.CompareTo(min) < 0)
             {
+                field.IsValid = false;
                 field.AddError(new Error(Error.Types.Warning, nameof(Between), $"Field '{field.FieldName}' must be more than {min}"));
             }
 
             if (field.Field.CompareTo(max) > 0)
             {
+                field.IsValid = false;
                 field.AddError(new Error(Error.Types.Warning, nameof(Between), $"Field '{field.FieldName}' must be less than {max}"));
             }
 
@@ -92,6 +95,7 @@ namespace Logic.Validate
 
             if (!Regex.IsMatch(text, expression))
             {
+                field.IsValid = false;
                 field.AddError(new Error(Error.Types.Warning, nameof(Match), $"Field '{field.FieldName}' doesn't match to '{expression}'"));
             }
 
