@@ -3,6 +3,7 @@ using Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Logic.Validate
 {
@@ -19,20 +20,20 @@ namespace Logic.Validate
         /// <summary>
         /// Returns field from object by name prepared for validation
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="O"></typeparam>
         /// <typeparam name="F"></typeparam>
         /// <param name="obj"></param>
         /// <param name="fieldName"></param>
         /// <returns></returns>
-        public static ValidatableField<F> ForField<T, F>(this T obj, string fieldName) where T : class
+        public static ValidatableField<F> ForField<O, F>(this O obj, string fieldName) where O : class
         {
             if (string.IsNullOrEmpty(fieldName))
             {
-                throw new ArgumentNullException(nameof(fieldName) + "must be fullfilled!");
+                throw new ArgumentNullException(nameof(fieldName) + " must be fullfilled!");
             }
 
-            var prop = typeof(T).GetProperty(fieldName);
-            if (prop is null) throw new Exception($"Property {nameof(fieldName)} doesn't exists in class {nameof(T)}");
+            var prop = typeof(O).GetProperty(fieldName);
+            if (prop is null) throw new Exception($"Property {nameof(fieldName)} doesn't exists in class {nameof(O)}");
 
             return new ValidatableField<F>((F)prop.GetValue(obj), fieldName);
         }
@@ -43,7 +44,7 @@ namespace Logic.Validate
 
             if (field.Field is null)
             {
-                field.AddError(new Error(Error.Types.Warning, nameof(Required), $"Field {field.FieldName} is required"));
+                field.AddError(new Error(Error.Types.Warning, nameof(Required), $"Field '{field.FieldName}' is required"));
             }
 
             return field;
@@ -55,12 +56,12 @@ namespace Logic.Validate
 
             if (field.Field.CompareTo(min) < 0)
             {
-                field.AddError(new Error(Error.Types.Warning, nameof(Between), $"Field {field.FieldName} must be more than {min}"));
+                field.AddError(new Error(Error.Types.Warning, nameof(Between), $"Field '{field.FieldName}' must be more than {min}"));
             }
 
             if (field.Field.CompareTo(max) > 0)
             {
-                field.AddError(new Error(Error.Types.Warning, nameof(Between), $"Field {field.FieldName} must be less than {max}"));
+                field.AddError(new Error(Error.Types.Warning, nameof(Between), $"Field '{field.FieldName}' must be less than {max}"));
             }
 
             return field;
@@ -78,6 +79,20 @@ namespace Logic.Validate
             {
                 field.IsValid = false;
                 field.Errors.AddRange(result.Errors);
+            }
+
+            return field;
+        }
+
+        public static ValidatableField<string> Match(this ValidatableField<string> field, string text, string expression)
+        {
+            if (field is null) throw new ArgumentNullException(nameof(field));
+            if (text is null) throw new ArgumentNullException(nameof(field));
+            if (expression is null) throw new ArgumentNullException(nameof(field));
+
+            if (!Regex.IsMatch(text, expression))
+            {
+                field.AddError(new Error(Error.Types.Warning, nameof(Match), $"Field '{field.FieldName}' doesn't match to '{expression}'"));
             }
 
             return field;

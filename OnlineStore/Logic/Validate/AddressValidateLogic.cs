@@ -1,6 +1,7 @@
 ﻿using DTO;
 using Entities;
 using InterfacesBLL;
+using Logic.Validate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +12,16 @@ namespace Logic
 {
     public class AddressValidateLogic : IValidateLogic<Address>
     {
-        public ValidatableObject<Address> Validate(Address address)
+        public ValidatableObject<Address> Validate(Address validatedAddress)
         {
-            var validatedAddress = new ValidatableObject<Address>(address);
+            var address = ValidatorExtensions.AsValidatableObject(validatedAddress);
 
+            _ = address.ForField<ValidatableObject<Address>, string>(nameof(validatedAddress.Country)).Required().Length(2, 50);
+            _ = address.ForField<ValidatableObject<Address>, string>(nameof(validatedAddress.Region)).Required().Length(2, 50).Match(validatedAddress.Country, Consts.ExpRegion);
+            _ = address.ForField<ValidatableObject<Address>, string>(nameof(validatedAddress.Locality)).Required().Length(2, 50).Match(validatedAddress.Locality, Consts.ExpLocality);
+            _ = address.ForField<ValidatableObject<Address>, string>(nameof(validatedAddress.Street)).Required().Length(2, 50).Match(validatedAddress.Street, Consts.ExpStreet);
 
-
-            return validatedAddress;
+            return address;
         }
     }
 }
