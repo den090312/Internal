@@ -14,7 +14,7 @@ namespace Logic.Validate
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static ValidatableObject<O, F> AsValidatableObject<O, F>(this O obj) where O : class => new ValidatableObject<O, F>(obj);
+        public static ValidatableObject<O> AsValidatableObject<O>(this O obj) where O : class => new ValidatableObject<O>(obj);
 
         /// <summary>
         /// Returns field from object by name prepared for validation

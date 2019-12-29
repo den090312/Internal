@@ -7,9 +7,9 @@ namespace DTO
 {
     public class ValidatableField<F>
     {
-        public bool IsValid { get; set; }
-
         public F Field { get; private set; }
+
+        public bool IsValid { get; set; }
 
         public string FieldName { get; }
 

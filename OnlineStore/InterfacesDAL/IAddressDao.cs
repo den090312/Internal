@@ -1,12 +1,13 @@
-﻿using Entities;
+﻿using DTO;
+using Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace InterfacesDAL
 {
-    public interface IAddressDao
+    public interface IAddressDao<O>
     {
-        //void Add(Address address, out ValidatableObject validator);
+        void Add(O address, out ValidatableObject<O> validatableObject);
     }
 }
