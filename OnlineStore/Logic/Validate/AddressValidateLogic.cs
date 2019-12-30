@@ -3,10 +3,7 @@ using Entities;
 using InterfacesBLL;
 using Logic.Validate;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
+using static Logic.Validate.ValidatorExtensions;
 
 namespace Logic
 {
@@ -17,11 +14,18 @@ namespace Logic
             var address = ValidatorExtensions.AsValidatableObject(validatedAddress);
 
             _ = address.ForField<ValidatableObject<Address>, string>(nameof(validatedAddress.Country)).Required().Length(2, 50);
-            _ = address.ForField<ValidatableObject<Address>, string>(nameof(validatedAddress.Region)).Required().Length(2, 50).Match(validatedAddress.Country, Consts.ExpRegion);
-            _ = address.ForField<ValidatableObject<Address>, string>(nameof(validatedAddress.Locality)).Required().Length(2, 50).Match(validatedAddress.Locality, Consts.ExpLocality);
-            _ = address.ForField<ValidatableObject<Address>, string>(nameof(validatedAddress.Street)).Required().Length(2, 50).Match(validatedAddress.Street, Consts.ExpStreet);
+            _ = address.ForField<ValidatableObject<Address>, string>(nameof(validatedAddress.Region)).Required().Length(2, 50).Match(Consts.ExpRegion);
+            _ = address.ForField<ValidatableObject<Address>, string>(nameof(validatedAddress.Locality)).Required().Length(2, 50).Match(Consts.ExpLocality);
+            _ = address.ForField<ValidatableObject<Address>, string>(nameof(validatedAddress.Street)).Required().Length(2, 50).Match(Consts.ExpStreet);
+
+            _ = address.ForField<ValidatableObject<Address>, ushort>(nameof(validatedAddress.House)).Custom(HouseIsTen(validatedAddress));
 
             return address;
+        }
+
+        private CustomValidator<ushort> HouseIsTen(Address validatedAddress)
+        {
+            throw new NotImplementedException();
         }
     }
 }

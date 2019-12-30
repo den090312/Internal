@@ -9,6 +9,8 @@ namespace Logic.Validate
 {
     public static class ValidatorExtensions
     {
+        public delegate ValidatableField<F> CustomValidator<F>(ValidatableField<F> field);
+
         /// <summary>
         /// Returns object prepared for validation
         /// </summary>
@@ -36,6 +38,17 @@ namespace Logic.Validate
             if (prop is null) throw new Exception($"Property {nameof(fieldName)} doesn't exists in class {nameof(O)}");
 
             return new ValidatableField<F>((F)prop.GetValue(obj), fieldName);
+        }
+
+        public static ValidatableField<F> Custom<F>(this ValidatableField<F> field, CustomValidator<F> customValidator)
+        {
+            if (customValidator is null) throw new ArgumentNullException(nameof(customValidator));
+
+            var resultValidator = customValidator.Invoke(field);
+
+            if (resultValidator is null) throw new ArgumentNullException(nameof(resultValidator));
+
+            return resultValidator;
         }
 
         public static ValidatableField<F> Required<F>(this ValidatableField<F> field) where F : class
@@ -87,13 +100,13 @@ namespace Logic.Validate
             return field;
         }
 
-        public static ValidatableField<string> Match(this ValidatableField<string> field, string text, string expression)
+        public static ValidatableField<string> Match(this ValidatableField<string> field, string expression)
         {
             if (field is null) throw new ArgumentNullException(nameof(field));
-            if (text is null) throw new ArgumentNullException(nameof(field));
+            if (field.Field is null) throw new ArgumentNullException(nameof(field));
             if (expression is null) throw new ArgumentNullException(nameof(field));
 
-            if (!Regex.IsMatch(text, expression))
+            if (!Regex.IsMatch(field.Field, expression))
             {
                 field.IsValid = false;
                 field.AddError(new Error(Error.Types.Warning, nameof(Match), $"Field '{field.FieldName}' doesn't match to '{expression}'"));
