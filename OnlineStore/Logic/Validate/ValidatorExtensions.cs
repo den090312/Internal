@@ -9,8 +9,6 @@ namespace Logic.Validate
 {
     public static class ValidatorExtensions
     {
-        public delegate void CustomValidator<F>(ref ValidatableField<F> field);
-
         /// <summary>
         /// Returns object prepared for validation
         /// </summary>
@@ -40,11 +38,11 @@ namespace Logic.Validate
             return new ValidatableField<F>((F)prop.GetValue(obj), fieldName);
         }
 
-        public static ValidatableField<F> Custom<F>(this ValidatableField<F> field, CustomValidator<F> customValidator)
+        public static ValidatableField<F> Custom<F>(this ValidatableField<F> field, Action<ValidatableField<F>> action)
         {
-            if (customValidator is null) throw new ArgumentNullException(nameof(customValidator));
+            if (action is null) throw new ArgumentNullException(nameof(action));
 
-            customValidator.Invoke(ref field);
+            action.Invoke(field);
 
             return field;
         }

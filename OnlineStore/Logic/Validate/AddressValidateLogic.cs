@@ -23,7 +23,7 @@ namespace Logic
             return add;
         }
 
-        private void CheckHouseForTen(ref ValidatableField<ushort> field)
+        private void CheckHouseForTen(ValidatableField<ushort> field)
         {
             if (field.Field != 10)
             {
