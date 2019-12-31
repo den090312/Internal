@@ -38,11 +38,11 @@ namespace Logic.Validate
             return new ValidatableField<F>((F)prop.GetValue(obj), fieldName);
         }
 
-        public static ValidatableField<F> Custom<F>(this ValidatableField<F> field, Action<ValidatableField<F>> action)
+        public static ValidatableField<F> Custom<F>(this ValidatableField<F> field, Action<ValidatableField<F>> customValidation)
         {
-            if (action is null) throw new ArgumentNullException(nameof(action));
+            if (customValidation is null) throw new ArgumentNullException(nameof(customValidation));
 
-            action.Invoke(field);
+            customValidation.Invoke(field);
 
             return field;
         }
