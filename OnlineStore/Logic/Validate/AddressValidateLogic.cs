@@ -9,23 +9,29 @@ namespace Logic
 {
     public class AddressValidateLogic : IValidateLogic<Address>
     {
-        public ValidatableObject<Address> Validate(Address validatedAddress)
+        public ValidatableObject<Address> Validate(Address address)
         {
-            var address = ValidatorExtensions.AsValidatableObject(validatedAddress);
+            var add = ValidatorExtensions.AsValidatableObject(address);
 
-            _ = address.ForField<ValidatableObject<Address>, string>(nameof(validatedAddress.Country)).Required().Length(2, 50);
-            _ = address.ForField<ValidatableObject<Address>, string>(nameof(validatedAddress.Region)).Required().Length(2, 50).Match(Consts.ExpRegion);
-            _ = address.ForField<ValidatableObject<Address>, string>(nameof(validatedAddress.Locality)).Required().Length(2, 50).Match(Consts.ExpLocality);
-            _ = address.ForField<ValidatableObject<Address>, string>(nameof(validatedAddress.Street)).Required().Length(2, 50).Match(Consts.ExpStreet);
+            _ = add.ForField<ValidatableObject<Address>, string>(nameof(address.Country)).Required().Length(2, 50);
+            _ = add.ForField<ValidatableObject<Address>, string>(nameof(address.Region)).Required().Length(2, 50).Match(Consts.ExpRegion);
+            _ = add.ForField<ValidatableObject<Address>, string>(nameof(address.Locality)).Required().Length(2, 50).Match(Consts.ExpLocality);
+            _ = add.ForField<ValidatableObject<Address>, string>(nameof(address.Street)).Required().Length(2, 50).Match(Consts.ExpStreet);
+            _ = add.ForField<ValidatableObject<Address>, ushort>(nameof(address.House)).Custom(HouseIsTen(address));
 
-            _ = address.ForField<ValidatableObject<Address>, ushort>(nameof(validatedAddress.House)).Custom(HouseIsTen(validatedAddress));
-
-            return address;
+            return add;
         }
 
-        private CustomValidator<ushort> HouseIsTen(Address validatedAddress)
+        private Error HouseIsTen(Address address)
         {
-            throw new NotImplementedException();
+            if (address.House == 10)
+            {
+                return null;
+            }
+            else
+            {
+                return new Error(Error.Types.Warning, nameof(HouseIsTen), $"{nameof(address.House)} is not equal to 10");
+            }
         }
     }
 }
