@@ -18,17 +18,23 @@ namespace Logic
             _ = add.ForField<ValidatableObject<Address>, string>(nameof(address.Locality)).Required().Length(2, 50).Match(Consts.ExpLocality);
             _ = add.ForField<ValidatableObject<Address>, string>(nameof(address.Street)).Required().Length(2, 50).Match(Consts.ExpStreet);
 
-            _ = add.ForField<ValidatableObject<Address>, ushort>(nameof(address.House)).Custom(CheckHouseForTen);
+            //_ = add.ForField<ValidatableObject<Address>, ushort>(nameof(address.House)).Custom(CheckHouseForTen);
+
+            _ = add.ForField<ValidatableObject<Address>, ushort>(nameof(address.House)).If(HouseIsThousand).SliceForHundred().Else(AddThousand);
 
             return add;
         }
 
-        private void CheckHouseForTen(ValidatableField<ushort> field)
-        {
-            if (field.Field != 10)
-            {
-                field.AddError(new Error(Error.Types.Warning, field.FieldName, $"{nameof(field.FieldName)} is not equal to 10"));
-            }
-        }
+        private void AddThousand(ValidatableField<ushort> field) => field.Field += 1000;
+
+        private bool HouseIsThousand(ValidatableField<ushort> field) => field.Field == 1000;
+
+        //private void CheckHouseForTen(ValidatableField<ushort> field)
+        //{
+        //    if (field.Field != 10)
+        //    {
+        //        field.AddError(new Error(Error.Types.Warning, field.FieldName, $"{nameof(field.FieldName)} is not equal to 10"));
+        //    }
+        //}
     }
 }

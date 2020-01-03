@@ -7,13 +7,15 @@ namespace DTO
 {
     public class ValidatableField<F>
     {
-        public F Field { get; private set; }
+        public F Field { get; set; }
 
         public bool IsValid { get; set; }
 
         public string FieldName { get; }
 
         public List<Error> Errors { get; set; }
+
+        public bool Continew { get; set; }
 
         public ValidatableField(F field, string fieldName)
         {
@@ -23,6 +25,7 @@ namespace DTO
             IsValid = true;
             Errors = new List<Error>();
             FieldName = fieldName;
+            Continew = true;
         }
 
         public void AddError(Error error)
