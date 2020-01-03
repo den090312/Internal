@@ -40,6 +40,8 @@ namespace Logic.Validate
 
         public static ValidatableField<F> Custom<F>(this ValidatableField<F> field, Action<ValidatableField<F>> customValidation)
         {
+            if (field is null) throw new ArgumentNullException(nameof(field));
+
             if (!field.Continew)
             {
                 return field;
@@ -54,6 +56,8 @@ namespace Logic.Validate
 
         public static ValidatableField<F> If<F>(this ValidatableField<F> field, Func<ValidatableField<F>, bool> customCondition)
         {
+            if (field is null) throw new ArgumentNullException(nameof(field));
+
             if (!field.Continew)
             {
                 return field;
@@ -68,12 +72,12 @@ namespace Logic.Validate
 
         public static ValidatableField<ushort> SliceForHundred(this ValidatableField<ushort> field)
         {
+            if (field is null) throw new ArgumentNullException(nameof(field));
+
             if (!field.Continew)
             {
                 return field;
             }
-
-            if (field is null) throw new ArgumentNullException(nameof(field));
 
             field.Field -= 100;
 
@@ -82,13 +86,13 @@ namespace Logic.Validate
 
         public static ValidatableField<ushort> AddThousand(this ValidatableField<ushort> field)
         {
+            if (field is null) throw new ArgumentNullException(nameof(field));
+
             if (!field.Continew)
             {
                 return field;
             }
-
-            if (field is null) throw new ArgumentNullException(nameof(field));
-            
+           
             field.Field += 1000;
 
             return field;
@@ -96,6 +100,8 @@ namespace Logic.Validate
 
         public static ValidatableField<F> Else<F>(this ValidatableField<F> field, Action<ValidatableField<F>> customValidation)
         {
+            if (field is null) throw new ArgumentNullException(nameof(field));
+
             if (field.Continew)
             {
                 return field;
@@ -112,12 +118,12 @@ namespace Logic.Validate
 
         public static ValidatableField<F> Required<F>(this ValidatableField<F> field) where F : class
         {
+            if (field is null) throw new ArgumentNullException(nameof(field));
+
             if (!field.Continew)
             {
                 return field;
             }
-
-            if (field is null) throw new ArgumentNullException(nameof(field));
 
             if (field.Field is null)
             {
@@ -130,12 +136,12 @@ namespace Logic.Validate
 
         public static ValidatableField<F> Between<F>(this ValidatableField<F> field, F min, F max) where F : IComparable
         {
+            if (field is null) throw new ArgumentNullException(nameof(field));
+
             if (!field.Continew)
             {
                 return field;
             }
-
-            if (field is null) throw new ArgumentNullException(nameof(field));
 
             if (field.Field.CompareTo(min) < 0)
             {
@@ -154,12 +160,12 @@ namespace Logic.Validate
 
         public static ValidatableField<string> Length(this ValidatableField<string> field, int min, int max)
         {
+            if (field is null) throw new ArgumentNullException(nameof(field));
+
             if (!field.Continew)
             {
                 return field;
             }
-
-            if (field is null) throw new ArgumentNullException(nameof(field));
 
             var ff = new ValidatableField<int>(field.Field.Length, nameof(field.Field.Length));
 
@@ -176,12 +182,13 @@ namespace Logic.Validate
 
         public static ValidatableField<string> Match(this ValidatableField<string> field, string expression)
         {
+            if (field is null) throw new ArgumentNullException(nameof(field));
+
             if (!field.Continew)
             {
                 return field;
             }
 
-            if (field is null) throw new ArgumentNullException(nameof(field));
             if (field.Field is null) throw new ArgumentNullException(nameof(field));
             if (expression is null) throw new ArgumentNullException(nameof(field));
 
