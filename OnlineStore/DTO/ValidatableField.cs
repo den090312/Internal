@@ -15,7 +15,7 @@ namespace DTO
 
         public List<Error> Errors { get; set; }
 
-        public bool Continew { get; set; }
+        public bool Continue { get; set; }
 
         public ValidatableField(F field, string fieldName)
         {
@@ -25,7 +25,7 @@ namespace DTO
             IsValid = true;
             Errors = new List<Error>();
             FieldName = fieldName;
-            Continew = true;
+            Continue = true;
         }
 
         public void AddError(Error error)
