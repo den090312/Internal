@@ -42,7 +42,7 @@ namespace Logic.Validate
         {
             if (field is null) throw new ArgumentNullException(nameof(field));
 
-            if (!field.Continew)
+            if (!field.Continue)
             {
                 return field;
             }
@@ -58,14 +58,14 @@ namespace Logic.Validate
         {
             if (field is null) throw new ArgumentNullException(nameof(field));
 
-            if (!field.Continew)
+            if (!field.Continue)
             {
                 return field;
             }
 
             if (customCondition is null) throw new ArgumentNullException(nameof(customCondition));
 
-            field.Continew = customCondition.Invoke(field);
+            field.Continue = customCondition.Invoke(field);
 
             return field;
         }
@@ -74,7 +74,7 @@ namespace Logic.Validate
         {
             if (field is null) throw new ArgumentNullException(nameof(field));
 
-            if (!field.Continew)
+            if (!field.Continue)
             {
                 return field;
             }
@@ -88,7 +88,7 @@ namespace Logic.Validate
         {
             if (field is null) throw new ArgumentNullException(nameof(field));
 
-            if (!field.Continew)
+            if (!field.Continue)
             {
                 return field;
             }
@@ -102,7 +102,7 @@ namespace Logic.Validate
         {
             if (field is null) throw new ArgumentNullException(nameof(field));
 
-            if (field.Continew)
+            if (field.Continue)
             {
                 return field;
             }
@@ -110,7 +110,7 @@ namespace Logic.Validate
             {
                 if (customValidation is null) throw new ArgumentNullException(nameof(customValidation));
 
-                field.Continew = true;
+                field.Continue = true;
 
                 return Custom(field, customValidation);
             }
@@ -120,7 +120,7 @@ namespace Logic.Validate
         {
             if (field is null) throw new ArgumentNullException(nameof(field));
 
-            if (!field.Continew)
+            if (!field.Continue)
             {
                 return field;
             }
@@ -138,7 +138,7 @@ namespace Logic.Validate
         {
             if (field is null) throw new ArgumentNullException(nameof(field));
 
-            if (!field.Continew)
+            if (!field.Continue)
             {
                 return field;
             }
@@ -162,7 +162,7 @@ namespace Logic.Validate
         {
             if (field is null) throw new ArgumentNullException(nameof(field));
 
-            if (!field.Continew)
+            if (!field.Continue)
             {
                 return field;
             }
@@ -184,7 +184,7 @@ namespace Logic.Validate
         {
             if (field is null) throw new ArgumentNullException(nameof(field));
 
-            if (!field.Continew)
+            if (!field.Continue)
             {
                 return field;
             }
